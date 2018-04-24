@@ -6,6 +6,7 @@ package convex_hull;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Stack;
 import java.util.TreeSet;
 
@@ -20,10 +21,33 @@ import convex_hull.test.Point;
  * @version 1.0.0
  */
 public class QuickHull {
+  /**
+   * <h2>PointsComparator</h2>
+   * Class used as comparator for 
+   * the treeSet of the convex hull.
+   * 
+   * @author	Cristian Abrante Dorta
+   * @company	University Of La Laguna
+   * @date 	24 abr. 2018
+   * @version 	1.0.0
+   */
+  public class PointsComparator implements Comparator<Point2D> {
+    @Override
+    public int compare(Point2D p1, Point2D p2) {
+      if (p1.equals(p2)) {
+        return 0;
+      }
+      double firstValue = Math.atan2(p1.getY() - centerPoint.getY(), p1.getX() - centerPoint.getX());
+      double secondValue = Math.atan2(p2.getY() - centerPoint.getY(), p2.getX() - centerPoint.getX());
+      return -Double.compare(firstValue, secondValue);
+    }
+  }
+  private boolean firstIteration = true;
+  private Point2D centerPoint = null;
   // Points that we are evaluating
   private ArrayList<Point2D> points;
   // Points of the convex hull
-  private ArrayList<Point2D> convexHull;
+  private TreeSet<Point2D> convexHull;
   // Stack for evaluating the movements.
   private Stack<StepPair> stepStack;
   // Current Line that we are evaluating.
@@ -84,7 +108,7 @@ public class QuickHull {
   /**
    * @return the convexHull
    */
-  public ArrayList<Point2D> getConvexHull() {
+  public TreeSet<Point2D> getConvexHull() {
     return convexHull;
   }
   
@@ -96,6 +120,9 @@ public class QuickHull {
    * and false otherwise.
    */
   public boolean nextIteration() {
+    if (firstIteration) {
+      firstIteration = false;      
+    }
     if (!getStepStack().isEmpty()) {
       StepPair currentStep = getStepStack().pop();
       setCurrentLine(currentStep.getLine());
@@ -151,7 +178,6 @@ public class QuickHull {
     Point2D maxPoint = getPoint(0);
     Point2D minPoint = getPoint(0);
     
-    
     for (Point2D point : getPoints()) {
       // point has a bigger x component.
       if ((point.getX() - maxPoint.getX()) > LineSide.EPS) {
@@ -162,6 +188,7 @@ public class QuickHull {
         minPoint = point;
       }
     }
+    
     currentLine = new Line2D.Double(minPoint, maxPoint);
   }
   
@@ -207,7 +234,7 @@ public class QuickHull {
   /**
    * @param convexHull the convexHull to set
    */
-  private void setConvexHull(ArrayList<Point2D> convexHull) {
+  private void setConvexHull(TreeSet<Point2D> convexHull) {
     if (convexHull != null) {
       this.convexHull = convexHull;      
     } else {
@@ -221,18 +248,7 @@ public class QuickHull {
    */
   private void addPointToHull(Point2D point) {
     if (point != null) {
-      //System.out.println(String.format("(%f, %f)", point.getX(), point.getY()));
-      boolean insert = true;
-      int index = 0;
-      while (index < getConvexHull().size() && insert) {
-        if (getConvexHull().get(index).equals(point)) {
-          insert = false;
-        }
-        index++;
-      }
-      if (insert) {
-        getConvexHull().add(point);        
-      }
+      getConvexHull().add(point);
     } else {
       throw new NullPointerException("point can't be null");
     }
@@ -245,7 +261,8 @@ public class QuickHull {
   private void initializeConfiguration(ArrayList<Point2D> points) {
     if (points != null) {
       this.points = points;
-      setConvexHull(new ArrayList<Point2D>());
+      this.centerPoint = calculateBarycenter();
+      setConvexHull(new TreeSet<Point2D>(new PointsComparator()));
       initializeCurrentLine();
       initializeStepStack();
       addPointToHull(getCurrentLine().getP1());
@@ -253,5 +270,15 @@ public class QuickHull {
     } else {
       throw new NullPointerException("points can't be null");
     }
+  }
+  
+  private Point2D calculateBarycenter() {
+    double xCenter = 0.0;
+    double yCenter = 0.0;
+    for (Point2D point : getPoints()) {
+      xCenter += point.getX();
+      yCenter += point.getY();
+    }
+    return new Point2D.Double(xCenter / (double) getNumberOfPoints(), yCenter / (double) getNumberOfPoints());
   }
 }

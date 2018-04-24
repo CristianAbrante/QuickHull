@@ -12,10 +12,10 @@ package convex_hull.test;
  * @version 1.0.0
  */
 public class Point {
-  double x;
-  double y;
+  int x;
+  int y;
   
-  public Point(double x, double y) {
+  public Point(int x, int y) {
     this.x = x;
     this.y = y;
   }

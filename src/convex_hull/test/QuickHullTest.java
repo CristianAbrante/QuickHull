@@ -8,6 +8,7 @@ import static org.junit.Assert.*;
 import java.awt.geom.Point2D;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 
 import org.junit.Before;
@@ -50,12 +51,11 @@ public class QuickHullTest {
     boolean found = false;
     for (int i = 0; i < solution.size(); ++i) {
       found = false;
-      index = 0;
-      while (index < hullCalculator.getConvexHull().size() && !found) {
-        if (solution.get(i).equals(hullCalculator.getConvexHull().get(index))) {
+      Iterator<Point2D> pointIt = hullCalculator.getConvexHull().iterator();
+      while (pointIt.hasNext() && !found) {
+        if (solution.get(i).equals(pointIt.next())) {
           found = true;
         }
-        index++;
       }
       assertTrue(found);
     }

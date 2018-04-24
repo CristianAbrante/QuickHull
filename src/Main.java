@@ -15,6 +15,6 @@ public class Main {
    * @param args
    */
   public static void main(String[] args) {
-    new Controller(10);
+    new Controller(100);
   }
 }

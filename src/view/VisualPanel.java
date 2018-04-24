@@ -5,8 +5,6 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
-import com.sun.awt.SecurityWarning;
-
 public class VisualPanel extends JPanel {
   
   DrawableConvexHull drawableHull;

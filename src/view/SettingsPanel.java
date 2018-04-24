@@ -25,12 +25,12 @@ public class SettingsPanel extends JPanel {
   public static final String PAUSE = "pause";
   public static final String STEP_BY_STEP = "next step";
   
-  private JLabel      title = new JLabel("settings");
+  private JTextField  numberOfPoints = new JTextField("points");
   private JButton     initialize = new JButton(INITIALIZE);
   private JButton     play = new JButton(PLAY);
   private JButton     pause = new JButton(PAUSE);
   private JButton     stepByStep = new JButton(STEP_BY_STEP);
-  private JSlider     delaySlider = new JSlider(1, 1000);
+  private JSlider     delaySlider = new JSlider(1, Controller.MAX_DELAY);
   
   private ArrayList<JButton> buttons;
   
@@ -39,7 +39,7 @@ public class SettingsPanel extends JPanel {
     setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
     setBackground(Color.RED);
     
-    add(title);
+    add(numberOfPoints);
     
     buttons = new ArrayList<JButton>();
     buttons.add(initialize);
@@ -49,7 +49,16 @@ public class SettingsPanel extends JPanel {
     initializeElements(controller);
     
     add(stepByStep);
+    delaySlider.addChangeListener(controller);
     add(delaySlider);
+  }
+  
+  public int getDelayValue() {
+    return (int) this.delaySlider.getValue();
+  }
+  
+  public int getNumberOfPoints() {
+    return Integer.parseInt(numberOfPoints.getText());
   }
   
   private void initializeElements(Controller controller) {
