@@ -79,7 +79,7 @@ public class MainFrame {
     if (getVisualPanel() != null)
       frame.add(getVisualPanel(), BorderLayout.CENTER);
     if (getSettingsPanel() != null)
-      frame.add(getSettingsPanel().getContentPanel(), BorderLayout.EAST);
+      frame.add(getSettingsPanel(), BorderLayout.SOUTH);
     frame.setSize(getWidth(), getHeight());
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     frame.setResizable(false);
