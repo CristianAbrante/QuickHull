@@ -1,6 +1,3 @@
-
-import javax.swing.JApplet;
-
 import controller.Controller;
 
 /**
@@ -11,20 +8,7 @@ import controller.Controller;
  * @date 		22/04/2018
  * @version 1.0.0
  */
-@SuppressWarnings("deprecation")
-public class Main extends JApplet {
-  
-  
-  
-  /* (non-Javadoc)
-   * @see java.applet.Applet#start()
-   */
-  @Override
-  public void start() {
-    // TODO Auto-generated method stub
-    super.start();
-    new Controller(50);
-  }
+public class Main {
 
   /**
    * @param args
